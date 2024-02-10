@@ -18,7 +18,8 @@ mod list;
 
 pub fn main() -> Result<(), Box<dyn Error>> {
     println!(
-        "Employee DB, version 0.1.0.\n\n{}\n{}\nWrite `quit` or press Ctrl+C to quit.",
+        "Employee DB, version {}.\n\n{}\n{}\nWrite `quit` or press Ctrl+C to quit.",
+        env!("CARGO_PKG_VERSION"),
         add::HELP_TEXT,
         list::HELP_TEXT
     );
