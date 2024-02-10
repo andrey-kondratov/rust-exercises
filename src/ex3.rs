@@ -1,9 +1,11 @@
-use std::io;
 use db::DB;
+use std::error::Error;
+use std::io::Write;
+use std::io::{self, stdout};
 
 mod add;
-mod list;
 mod db;
+mod list;
 
 /*
    Task:
@@ -15,23 +17,21 @@ mod db;
        the company by department, sorted alphabetically.
 */
 
-pub fn main() {
+pub fn main() -> Result<(), Box<dyn Error>> {
     println!(
-        "Employee DB, version 0.1.0.\n\n{}\n{}\nWrite `quit` or press Ctrl+C to quit.\n",
+        "Employee DB, version 0.1.0.\n\n{}\n{}\nWrite `quit` or press Ctrl+C to quit.",
         add::HELP_TEXT,
         list::HELP_TEXT
     );
 
-    run();
-}
+    let mut db = DB::new();
 
-fn run() {
-    let mut db = DB::create();
     loop {
+        print!("\n> ");
+        stdout().flush()?;
+
         let mut input = String::new();
-        io::stdin()
-            .read_line(&mut input)
-            .expect("Failed to read line.");
+        io::stdin().read_line(&mut input)?;
 
         let mut words = input.split_ascii_whitespace();
         match words.next() {
@@ -43,8 +43,12 @@ fn run() {
                     "quit" => break,
                     _ => println!("Sorry, I couldn't understand the command."),
                 }
-            },
+            }
             None => continue,
         }
     }
+
+    println!("Goodbye.");
+
+    Ok(())
 }

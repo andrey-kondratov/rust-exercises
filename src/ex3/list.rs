@@ -3,50 +3,42 @@ use crate::ex3::db::DB;
 pub const HELP_TEXT: &str =
     "Write `list <Dept>` or `list` to get employees of a department or all employees.";
 
+static EMPTY_VEC: Vec<String> = Vec::new();
+
 pub fn handle(db: &DB, args: Vec<&str>) {
-    if args.len() == 0 {
-        let mut total: usize = 0;
-        for department_name in db.get_departments() {
-            total += list_department(department_name, db);
+    let department_name = &args.join(" ");
+    if !department_name.trim().is_empty() {
+        match db.get_department(department_name) {
+            Some((department_name, employees)) => print_department(&department_name, employees),
+            None => println!("Department not found."),
         }
 
-        println!("Total employees in the company: {}.", total);
-        return;
+        return
     }
 
-    match db.get_department(&args.join(" ")) {
-        Some((department_name, employees)) => print_department(&department_name, employees),
-        None => println!("Department not found."),
-    }
-}
-
-fn list_department(department_name: &str, db: &DB) -> usize {
-    let mut count: usize = 0;
-
-    match db.get_employees(department_name) {
-        Some(employees) => {
-            println!(
-                "There are {number} employees in {department}: {names}.",
-                number = employees.len(),
-                department = department_name,
-                names = employees.join(", ")
-            );
-            count += employees.len();
+    let mut total: usize = 0;
+    for department_name in db.get_departments() {
+        match db.get_employees(department_name) {
+            Some(employees) => {
+                print_department(department_name, employees);
+                total += employees.len();
+            }
+            None => print_department(department_name, &EMPTY_VEC),
         }
-        None => println!(
-            "There are no employees in {}.",
-            department_name.to_ascii_uppercase()
-        ),
     }
 
-    count
+    println!("Total employees in the company: {}.", total);
 }
 
 fn print_department(department_name: &str, employees: &Vec<String>) {
-    println!(
-        "There are {number} employees in {department}: {names}.",
-        number = employees.len(),
-        department = department_name,
-        names = employees.join(", ")
-    );
+    let number = employees.len();
+    let employees = employees.join(", ");
+    match number {
+        0 => println!("There are no employees in {}.", department_name),
+        1 => println!("There is 1 employee in {}: {}.", department_name, employees),
+        _ => println!(
+            "There are {} employees in {}: {}.",
+            number, department_name, employees
+        ),
+    };
 }

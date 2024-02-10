@@ -5,18 +5,18 @@ pub struct DB {
 }
 
 impl DB {
-    pub fn create() -> DB {
-        return DB {
+    pub fn new() -> DB {
+        DB {
             departments: HashMap::<String, Vec<String>>::new(),
-        };
+        }
     }
 
     pub fn get_department(&self, department_name: &str) -> Option<(String, &Vec<String>)> {
         let department_name = department_name.to_ascii_uppercase();
-        match self.departments.get(&department_name) {
-            Some(employees) => Some((department_name, employees)),
-            None => None,
-        }
+
+        self.departments
+            .get(&department_name)
+            .and_then(|employees| Some((department_name, employees)))
     }
 
     pub fn get_departments(&self) -> Vec<&String> {
