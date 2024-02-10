@@ -1,8 +1,8 @@
-use crate::ex3::db::DB;
+use crate::ex3::db::Database;
 
 pub const HELP_TEXT: &str = "Write `add <Name> to <Dept>` to add a person to a department.";
 
-pub fn handle(db: &mut DB, args: Vec<&str>) {
+pub fn handle(db: &mut Database, args: Vec<&str>) {
     let mut employee_name = Vec::<&str>::new();
     let mut department_name = Vec::<&str>::new();
 

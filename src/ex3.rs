@@ -1,7 +1,6 @@
-use db::DB;
+use db::Database;
 use std::error::Error;
-use std::io::Write;
-use std::io::{self, stdout};
+use std::io::{stdin, stdout, Write};
 
 mod add;
 mod db;
@@ -24,14 +23,14 @@ pub fn main() -> Result<(), Box<dyn Error>> {
         list::HELP_TEXT
     );
 
-    let mut db = DB::new();
+    let mut db = Database::new();
 
     loop {
         print!("\n> ");
         stdout().flush()?;
 
         let mut input = String::new();
-        io::stdin().read_line(&mut input)?;
+        stdin().read_line(&mut input)?;
 
         let mut words = input.split_ascii_whitespace();
         match words.next() {

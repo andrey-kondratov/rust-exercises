@@ -1,12 +1,12 @@
 use std::collections::HashMap;
 
-pub struct DB {
+pub struct Database {
     departments: HashMap<String, Vec<String>>,
 }
 
-impl DB {
-    pub fn new() -> DB {
-        DB {
+impl Database {
+    pub fn new() -> Database {
+        Database {
             departments: HashMap::<String, Vec<String>>::new(),
         }
     }

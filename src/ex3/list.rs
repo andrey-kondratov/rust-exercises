@@ -1,11 +1,11 @@
-use crate::ex3::db::DB;
+use crate::ex3::db::Database;
 
 pub const HELP_TEXT: &str =
     "Write `list <Dept>` or `list` to get employees of a department or all employees.";
 
 static EMPTY_VEC: Vec<String> = Vec::new();
 
-pub fn handle(db: &DB, args: Vec<&str>) {
+pub fn handle(db: &Database, args: Vec<&str>) {
     let department_name = &args.join(" ");
     if !department_name.trim().is_empty() {
         match db.get_department(department_name) {
