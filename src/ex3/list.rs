@@ -16,18 +16,14 @@ pub fn handle(db: &Database, args: Vec<&str>) {
         return
     }
 
-    let mut total: usize = 0;
     for department_name in db.get_departments() {
         match db.get_employees(department_name) {
-            Some(employees) => {
-                print_department(department_name, employees);
-                total += employees.len();
-            }
+            Some(employees) => print_department(department_name, employees),
             None => print_department(department_name, &EMPTY_VEC),
         }
     }
 
-    println!("Total employees in the company: {}.", total);
+    println!("Total employees in the company: {}.", db.get_employees_total_count());
 }
 
 fn print_department(department_name: &str, employees: &Vec<String>) {

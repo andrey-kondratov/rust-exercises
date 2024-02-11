@@ -2,12 +2,14 @@ use std::collections::HashMap;
 
 pub struct Database {
     departments: HashMap<String, Vec<String>>,
+    total_count: i32
 }
 
 impl Database {
     pub fn new() -> Database {
         Database {
             departments: HashMap::<String, Vec<String>>::new(),
+            total_count: 0
         }
     }
 
@@ -20,14 +22,18 @@ impl Database {
     }
 
     pub fn get_departments(&self) -> Vec<&String> {
-        return self.departments.keys().collect();
+        self.departments.keys().collect()
+    }
+
+    pub fn get_employees_total_count(&self) -> &i32 {
+        &self.total_count
     }
 
     pub fn get_employees(&self, department_name: &str) -> Option<&Vec<String>> {
         self.departments.get(&department_name.to_ascii_uppercase())
     }
 
-    pub fn add(&mut self, employee_name: &String, department_name: &String) -> bool {
+    pub fn add(&mut self, employee_name: &String, department_name: &String) {
         let department_name = department_name.to_ascii_uppercase();
         let department = self
             .departments
@@ -37,7 +43,8 @@ impl Database {
         department.push(employee_name.to_string());
         department.sort_unstable(); // todo use sorted list instead to sort upon insertion
 
+        self.total_count += 1;
+
         println!("ok");
-        true
     }
 }
